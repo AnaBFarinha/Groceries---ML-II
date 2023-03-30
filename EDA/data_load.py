@@ -1,4 +1,12 @@
 import pandas as pd
 
-# Import dataset
-cust_info = pd.read_csv('.\\Data\\Customer Info Dataset.csv')
+def data_load(path):
+            
+    if path[-5:] == '.xlsv':
+        return pd.read_excel(path)
+    if path[-4:] == '.csv':
+        return pd.read_csv(path)
+    else:
+        print('Import for this file type is unavailable.')
+
+        
