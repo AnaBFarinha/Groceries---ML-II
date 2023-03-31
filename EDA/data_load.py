@@ -1,7 +1,8 @@
 import pandas as pd
 from typing import Tuple
 
-def data_load(path: str) -> Tuple[pd.DataFrame, None]:
+def data_load(path: str
+              ) -> Tuple[pd.DataFrame, None]:
 
     """Import dataset.
 
