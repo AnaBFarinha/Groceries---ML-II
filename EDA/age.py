@@ -5,6 +5,7 @@ import pandas as pd
 def calc_age(df: pd.DataFrame, 
              date: datetime.date = datetime.date(2023, 3, 31)
              ) -> None :
+    
     """
     Calculate age from date of birth.
 
