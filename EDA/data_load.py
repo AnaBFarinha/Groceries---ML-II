@@ -1,10 +1,25 @@
 import pandas as pd
 
-def data_load(path: str):
-            
+def data_load(path: str) -> pd.DataFrame | None:
+
+    """Import dataset.
+
+    ----------
+    Parameters:
+    - path (str): location and name of the file
+
+    ----------
+    Returns:
+     - pd.DataFrame
+     - None
+
+   """
+    
     if path[-5:] == '.xlsv':
         return pd.read_excel(path)
-    if path[-4:] == '.csv':
+    
+    elif path[-4:] == '.csv':
         return pd.read_csv(path)
+    
     else:
         print('Import for this file type is unavailable.')
