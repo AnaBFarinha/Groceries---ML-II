@@ -23,7 +23,7 @@ def calc_age(df: pd.DataFrame,
     df['customer_birthdate'] = pd.to_datetime(df.customer_birthdate)
 
     # Calculate age and round it down
-    df['age']=(np.fix((datetime.datetime.now() - df['customer_birthdate']).dt.days/365))
+    df['Age']=(np.fix((datetime.datetime.now() - df['customer_birthdate']).dt.days/365))
 
     # Convert series to int
-    (df['age']).astype(int)
+    (df['Age']).astype(int)
