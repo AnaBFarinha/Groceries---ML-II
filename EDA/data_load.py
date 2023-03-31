@@ -1,5 +1,5 @@
 import pandas as pd
-import Tuple
+from typing import Tuple
 
 def data_load(path: str) -> Tuple[pd.DataFrame, None]:
 
