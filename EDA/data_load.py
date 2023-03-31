@@ -4,7 +4,8 @@ from typing import Tuple
 def data_load(path: str
               ) -> Tuple[pd.DataFrame, None]:
 
-    """Import dataset.
+    """
+    Import dataset.
 
     ----------
     Parameters:
@@ -13,7 +14,7 @@ def data_load(path: str
     ----------
     Returns:
      - pd.DataFrame
-     - None
+     - None, but a message is shown
 
    """
     
