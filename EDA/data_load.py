@@ -9,12 +9,12 @@ def data_load(path: str
 
     ----------
     Parameters:
-    - path (str): location and name of the file
+     - path (str): location and name of the file.
 
     ----------
     Returns:
-     - pd.DataFrame
-     - None, but a message is shown
+     - pd.DataFrame.
+     - None, but a message is shown.
 
    """
     
