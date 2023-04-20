@@ -11,12 +11,12 @@ def calc_age(df: pd.DataFrame,
 
     ----------
     Parameters:
-    - df (pd.DataFrame): dataframe with column 
-            containing the date of birth
+     - df (pd.DataFrame): dataframe with column 
+            containing the date of birth.
 
     ----------
     Returns:
-     - None, but a column is added to the dataframe
+     - None, but a column is added to the dataframe.
 
    """
     

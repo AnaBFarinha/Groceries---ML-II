@@ -5,15 +5,15 @@ def education(customer_name: str) -> str:
     """
     Return level of education according 
         to the information written on the 
-        name of each customer
+        name of each customer.
 
     ----------
     Parameters:
-    - customer_name (str): name of a customer
+     - customer_name (str): name of a customer.
 
     ----------
     Returns:
-     - (str): level of education
+     - (str): level of education.
 
    """
     
