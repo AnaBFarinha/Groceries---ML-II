@@ -4,15 +4,14 @@ from typing import Tuple
 def categorical_numerical(
         dataframe: pd.DataFrame,
         drop_categorical: list = [],
-        drop_numerical: list = [])-> Tuple(
-    pd.DataFrame, pd.DataFrame
-    ):
+        drop_numerical: list = [])-> Tuple[
+        pd.DataFrame, pd.DataFrame]:
 
     """
     Separate a pandas dataframe into categorical
       and numerical dataframes, with optional columns to drop.
 
-    ----------
+   ----------
     Parameters:
      - dataframe (pd.DataFrame): A pandas dataframe to separate.
      - drop_categorical (list): A list of column names to drop from
@@ -20,7 +19,7 @@ def categorical_numerical(
      - drop_numerical (list): A list of column names to drop from
         the numerical dataframe.
 
-    ----------
+   ----------
     Returns:
      - Tuple(pd.DataFrame, pd.DataFrame): one with categorical 
         variables and another with numerical variables.
