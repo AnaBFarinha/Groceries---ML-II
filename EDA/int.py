@@ -4,10 +4,10 @@ import numpy as np
 def float_to_int(df: pd.DataFrame,
                   variables: list[str]
                   ) -> pd.DataFrame:
-    
     """
-    Converts specified columns in a pandas dataframe 
-        from float to integer data type.
+    Converts specified columns in a pandas dataframe
+      from float to integer data type, accounting 
+      for missing values.
 
     ----------
     Parameters:
@@ -20,17 +20,18 @@ def float_to_int(df: pd.DataFrame,
     Returns:
      - df (pd.DataFrame): The modified pandas dataframe
          with specified columns converted to integer data type.
+
     """
 
-    # Iterate through each variable and convert from float to integer
-    for i in variables:
+    # Iterate through each variable in the list of specified columns
+    for variable in variables:
+        # Check if the variable is of float data type
+        if df[variable].dtype == 'float64':
+            # Replace missing values with np.nan and convert to 
+            # nullable integer data type 'Int64'
+            df[variable] = df[variable].fillna(np.nan).astype('Int64')
 
-        # Check if column contains any missing values
-        if df[i].isnull().values.any():
-            continue
-        
-        else:
-            df[i] = df[i].astype(int)
-
-    # Return the modified dataframe
+    # Return the modified dataframe with specified columns converted
+    # to integer data type
     return df
+
