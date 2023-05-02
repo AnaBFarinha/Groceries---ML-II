@@ -29,7 +29,8 @@ def float_to_int(df: pd.DataFrame,
         if df[i].isnull().values.any():
             continue
         
-        df[i] = df[i].astype(int)
+        else:
+            df[i] = df[i].astype(int)
 
     # Return the modified dataframe
     return df
