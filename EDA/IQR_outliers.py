@@ -1,20 +1,24 @@
+import pandas as pd 
 import numpy as np
-import pandas as pd
 
 def IQR_outliers(df: pd.DataFrame,
                   variables: list[str]
                   ) -> None:
     """
-    Identify potential outliers using the interquartile range (IQR) method.
+    Identify potential outliers using the interquartile
+      range (IQR) method.
 
     ----------
     Parameters:
-     - df (pd.DataFrame): The pandas dataframe to be analyzed.
-     - variables (list): A list of column names in the dataframe to check for outliers.
+     - df (pd.DataFrame): The pandas dataframe to be
+        analyzed.
+     - variables (list): A list of column names in the
+        dataframe to check for outliers.
 
     ----------
     Returns:
-     - None, but prints the potential outliers for each variable.
+     - None, but prints the potential outliers for each
+        variable along with the number of outliers.
     """
 
     # Calculate the IQR for each variable
@@ -28,8 +32,7 @@ def IQR_outliers(df: pd.DataFrame,
 
     outliers = {}
     for var in variables:
-        outliers[var] = df[(df[var] < lower_bound[var]) | (df[var] > upper_bound[var])][var].tolist()
-        outliers[var] = np.unique(outliers[var])
+        outliers[var] = df[(df[var] < lower_bound[var]) | (df[var] > upper_bound[var])][var]
 
     # Print the potential outliers for each variable
     print('-------------------------------------')
@@ -37,5 +40,8 @@ def IQR_outliers(df: pd.DataFrame,
     print('-------------------------------------')
 
     for var in outliers:
-        print(var, ':', outliers[var])
+        print(var, ': Number of Outliers ->', len(outliers[var]))
+        if len(outliers[var]) != 0:
+            outliers[var] = np.unique(outliers[var])
+            print('  Outliers: ',outliers[var])
         print()
