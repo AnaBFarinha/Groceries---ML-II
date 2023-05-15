@@ -3,7 +3,9 @@ import numpy as np
 
 def bar_chart(x: np.ndarray, y: np.ndarray,
                x_name: str, y_name: str,
-               title: str) -> None:
+               title: str, 
+               color: str = '#e0218a'
+               ) -> None:
     
     """
     Create a bar chart using matplotlib with 
@@ -16,6 +18,7 @@ def bar_chart(x: np.ndarray, y: np.ndarray,
      - x_name (str): The name of the x-axis.
      - y_name (str): The name of the y-axis.
      - title (str): The title of the chart.
+     - color (str): The color of the bars. Defaults to '#e0218a'.
 
     ----------
     Returns:
