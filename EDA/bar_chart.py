@@ -36,7 +36,7 @@ def bar_chart(x: np.ndarray, y: np.ndarray,
     plt.ylabel(y_name, ha='right')
 
     # Create a bar chart using matplotlib with unique counts as x-axis and frequency as y-axis
-    plt.bar(x, y)
+    plt.bar(x, y, color = color)
 
     # Show the plot
     plt.show()
