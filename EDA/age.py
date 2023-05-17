@@ -20,9 +20,6 @@ def calc_age(df: pd.DataFrame,
 
    """
     
-    # Transform column to datetime pandas object
-    df['customer_birthdate'] = pd.to_datetime(df.customer_birthdate)
-
     # Calculate age and round it down
     df['age']=(np.fix((datetime.datetime.now() - df['customer_birthdate']).dt.days/365))
 
