@@ -92,7 +92,7 @@ def boxplot(df: pd.DataFrame, labels: list,
     """
     
     # Generate a box plot of the data in the DataFrame
-    plt.boxplot(df, vert=False, labels=labels)
+    plt.boxplot(df, vert=False, labels=labels, medianprops = {'color':'#e0218a'})
 
     # Set the title of the plot
     plt.title('Boxplot of ' + title)
