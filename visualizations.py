@@ -113,7 +113,7 @@ def plot_dendrogram(model: AgglomerativeClustering,
     dendrogram(linkage_matrix, **kwargs)
 
 
-def boxplot_color2(df, variable, color_dict, clusters, xlabel, ylabel, title):
+def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
     # Create the figure and axes
     fig, ax = plt.subplots()
 
