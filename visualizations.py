@@ -126,3 +126,16 @@ def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
 
     # Display the plot
     plt.show()
+
+
+def visualize_dimensionality_reduction(transformation, targets):
+    # create a scatter plot of the t-SNE output
+    plt.scatter(transformation[:, 0], transformation[:, 1], 
+                c=np.array(targets).astype(int), cmap=plt.cm.tab10)
+    
+    labels = np.unique(targets)
+    
+    # create a legend with the class labels and colors
+    handles = [plt.scatter([],[], c=plt.cm.tab10(i), label=label) for i, label in enumerate(labels)]
+    plt.legend(handles=handles, title='Cluster')
+    plt.show()
