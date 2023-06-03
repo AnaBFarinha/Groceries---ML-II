@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.cluster.hierarchy import dendrogram
+from sklearn.cluster import AgglomerativeClustering
 
 
 def bar_chart(x: np.ndarray, y: np.ndarray,
@@ -76,14 +77,19 @@ def boxplot(df: pd.DataFrame, labels: list,
     plt.show()
 
 
-def plot_dendrogram(model, **kwargs):
+def plot_dendrogram(model: AgglomerativeClustering,
+                     **kwargs) -> None:
     '''
     Create linkage matrix and then plot the dendrogram
-    Arguments: 
-    - model(HierarchicalClustering Model): hierarchical clustering model.
-    - **kwargs
+    
+    ----------
+    Parameters:
+     - model(HierarchicalClustering Model): hierarchical clustering model.
+     - **kwargs
+
+    ----------
     Returns:
-    None, but dendrogram plot is produced.
+     - None, but dendrogram plot is produced.
     '''
     # create the counts of samples under each node
     counts = np.zeros(model.children_.shape[0])
