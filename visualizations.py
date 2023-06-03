@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.cluster.hierarchy import dendrogram
 
@@ -103,3 +103,26 @@ def plot_dendrogram(model, **kwargs):
 
     # Plot the corresponding dendrogram
     dendrogram(linkage_matrix, **kwargs)
+
+
+def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
+    # Create the figure and axes
+    fig, ax = plt.subplots()
+
+    # Create the boxplot
+    boxplot = ax.boxplot([df[df['cluster_kmeans'] == cluster][variable].values for cluster in clusters],
+                         patch_artist=True, medianprops = {'color':'#000000'})
+
+    # Set the facecolor for each box based on the cluster color
+    for i, box in enumerate(boxplot['boxes']):
+        cluster = clusters[i]
+        color = color_dict.get(cluster)
+        box.set(facecolor=color)
+
+    # Customize the plot
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+
+    # Display the plot
+    plt.show()
