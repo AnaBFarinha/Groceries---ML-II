@@ -4,6 +4,7 @@ import pandas as pd
 from scipy.cluster.hierarchy import dendrogram
 from sklearn.cluster import AgglomerativeClustering
 import plotly.graph_objects as go
+from matplotlib.colors import ListedColormap
 
 
 def bar_chart(x: np.ndarray, y: np.ndarray,
