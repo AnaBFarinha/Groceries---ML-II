@@ -113,13 +113,13 @@ def plot_dendrogram(model: AgglomerativeClustering,
     dendrogram(linkage_matrix, **kwargs)
 
 
-def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
+def boxplot_color2(df, variable, color_dict, clusters, xlabel, ylabel, title):
     # Create the figure and axes
     fig, ax = plt.subplots()
 
     # Create the boxplot
     boxplot = ax.boxplot([df[df['cluster_kmeans'] == cluster][variable].values for cluster in clusters],
-                         patch_artist=True, medianprops = {'color':'#000000'})
+                         patch_artist=True, medianprops={'color': '#000000'})
 
     # Set the facecolor for each box based on the cluster color
     for i, box in enumerate(boxplot['boxes']):
@@ -128,25 +128,34 @@ def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
         box.set(facecolor=color)
 
     # Customize the plot
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.title(title)
+    ax.set_xticklabels(range(0, len(clusters)))  # Set x-axis tick labels as cluster numbers
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
 
     # Display the plot
     plt.show()
 
 
+
 def visualize_dimensionality_reduction(transformation, targets):
-    # create a scatter plot
+    color_palette = ["#8B0000", "#FFE66D", "#FF5900", "#00B4D8", "#32CD32", "#C9A0DC", "#e0218a"]
+    cmap = ListedColormap(color_palette)
+    
+    # Create a scatter plot
     plt.scatter(transformation[:, 0], transformation[:, 1], 
-                c=np.array(targets).astype(int), cmap=plt.cm.tab10)
+                c=np.array(targets).astype(int),
+                cmap=cmap)
     
     labels = np.unique(targets)
     
-    # create a legend with the class labels and colors
-    handles = [plt.scatter([],[], c=plt.cm.tab10(i), label=label) for i, label in enumerate(labels)]
+    # Create a legend with the class labels and colors
+    handles = [plt.scatter([],[], c=color_palette[i], label=label) for i, label in enumerate(labels)]
     plt.legend(handles=handles, title='Cluster')
+    
+    # Display the plot
     plt.show()
+
 
 
 def map_clusters(df, color_dict):
