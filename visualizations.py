@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.cluster.hierarchy import dendrogram
 from sklearn.cluster import AgglomerativeClustering
+import plotly.graph_objects as go
 
 
 def bar_chart(x: np.ndarray, y: np.ndarray,
@@ -135,7 +136,7 @@ def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
 
 
 def visualize_dimensionality_reduction(transformation, targets):
-    # create a scatter plot of the t-SNE output
+    # create a scatter plot
     plt.scatter(transformation[:, 0], transformation[:, 1], 
                 c=np.array(targets).astype(int), cmap=plt.cm.tab10)
     
@@ -145,3 +146,58 @@ def visualize_dimensionality_reduction(transformation, targets):
     handles = [plt.scatter([],[], c=plt.cm.tab10(i), label=label) for i, label in enumerate(labels)]
     plt.legend(handles=handles, title='Cluster')
     plt.show()
+
+
+def map_clusters(df, color_dict):
+    # Create a scatter mapbox figure
+    fig = go.Figure()
+
+    # Add scatter mapbox traces for each cluster
+    for cluster, color in color_dict.items():
+        filtered_df = df[df['cluster_kmeans'] == cluster]
+        scatter = go.Scattermapbox(
+            lat=filtered_df['latitude'],
+            lon=filtered_df['longitude'],
+            marker=dict(color=color),
+            name=f'Cluster {cluster}',
+            visible=True
+        )
+        fig.add_trace(scatter)
+
+    # Set the mapbox style and center on Lisbon, change the color of the title
+    fig.update_layout(
+        mapbox_style='open-street-map',
+        mapbox_center={'lat': 38.736946, 'lon': -9.142685},
+        mapbox_zoom=9,
+        title='Customers Addresses by Cluster',
+        title_font_color="#e0218a"
+    )
+
+    # Create a list of checkbox options
+    checkboxes = []
+    for cluster, color in color_dict.items():
+        checkbox = dict(
+            label=f'Cluster {cluster}',
+            method='update',
+            args=[{'visible': [False if trace.name != f"Cluster {cluster}" else True for trace in fig.data]}]
+        )
+        checkboxes.append(checkbox)
+
+    # Add the checkbox buttons
+    fig.update_layout(
+        updatemenus=[
+            go.layout.Updatemenu(
+                buttons=list([
+                    dict(
+                        label='All',
+                        method='update',
+                        args=[{'visible': [True] * len(fig.data)}]
+                    )
+                ] + checkboxes),
+                showactive=True,
+            )
+        ]
+    )
+
+    # Show the figure
+    fig.show()
