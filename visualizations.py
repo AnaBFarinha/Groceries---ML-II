@@ -5,6 +5,7 @@ from scipy.cluster.hierarchy import dendrogram
 from sklearn.cluster import AgglomerativeClustering
 import plotly.graph_objects as go
 from matplotlib.colors import ListedColormap
+from typing import Dict, List
 
 
 def bar_chart(x: np.ndarray, y: np.ndarray,
@@ -93,27 +94,64 @@ def plot_dendrogram(model: AgglomerativeClustering,
     Returns:
      - None, but dendrogram plot is produced.
     '''
-    # create the counts of samples under each node
-    counts = np.zeros(model.children_.shape[0])
+    
+    # Create the counts of samples under each node
+    counts = np.zeros(model.children_.shape[0])  
+    # Total number of samples in the model
     n_samples = len(model.labels_)
+
+    # Iterate through each merge in the hierarchical clustering model
     for i, merge in enumerate(model.children_):
+        # Initialize the count for the current node
         current_count = 0
         for child_idx in merge:
             if child_idx < n_samples:
-                current_count += 1  # leaf node
+                # Leaf node, increment the count
+                current_count += 1
             else:
+                # Non-leaf node, add the count from its children
                 current_count += counts[child_idx - n_samples]
+        # Store the count for the current node in the counts array
         counts[i] = current_count
 
+    # Create the linkage matrix by horizontally stacking the 
+    #   children indices, distances, and counts columns
     linkage_matrix = np.column_stack(
         [model.children_, model.distances_, counts]
     ).astype(float)
 
-    # Plot the corresponding dendrogram
+    # Plot the corresponding dendrogram using the linkage 
+    #   matrix and any additional keyword arguments
     dendrogram(linkage_matrix, **kwargs)
 
 
-def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
+def boxplot_color(df: pd.DataFrame, variable: str,
+                   color_dict: Dict[int, str],
+                   clusters: List[int],
+                   xlabel: str, ylabel: str,
+                   title: str) -> None:
+    
+    '''
+    Create a boxplot to compare a variable across different clusters.
+
+    ----------
+    Parameters:
+     - df (pd.DataFrame): The DataFrame containing the data.
+     - variable (str): The variable to compare across clusters.
+     - color_dict (Dict[int, str]): A dictionary mapping cluster 
+            numbers to color codes.
+     - clusters (List[int]): The list of cluster numbers to 
+        include in the boxplot.
+     - xlabel (str): The label for the x-axis.
+     - ylabel (str): The label for the y-axis.
+     - title (str): The title of the plot.
+
+    ----------
+    Returns:
+     - None, but it shows a plot.
+
+    '''
+
     # Create the figure and axes
     fig, ax = plt.subplots()
 
@@ -137,8 +175,25 @@ def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
     plt.show()
 
 
+def visualize_dimensionality_reduction(transformation: np.ndarray,
+                                        targets: List[str]) -> None:
+    
+    '''
+    Visualize dimensionality reduction results using a scatter plot.
 
-def visualize_dimensionality_reduction(transformation, targets):
+    ----------
+    Parameters:
+     - transformation (np.ndarray): The transformed data points
+         with reduced dimensions.
+     - targets (List[str]): The target labels for each data point.
+
+    ----------
+    Returns:
+     - None, but displays a plot.
+
+    '''
+
+    # Define the color palette for the clusters
     color_palette = ["#8B0000", "#FFE66D", "#FF5900", "#00B4D8", "#32CD32", "#C9A0DC", "#e0218a"]
     cmap = ListedColormap(color_palette)
     
@@ -147,9 +202,10 @@ def visualize_dimensionality_reduction(transformation, targets):
                 c=np.array(targets).astype(int),
                 cmap=cmap)
     
+    # Get names of the clusters
     labels = np.unique(targets)
     
-    # Create a legend with the class labels and colors
+    # Create a legend with the clusters and colors
     handles = [plt.scatter([],[], c=color_palette[i], label=label) for i, label in enumerate(labels)]
     plt.legend(handles=handles, title='Cluster')
     
@@ -157,14 +213,35 @@ def visualize_dimensionality_reduction(transformation, targets):
     plt.show()
 
 
+def map_clusters(df: pd.DataFrame,
+                  color_dict: Dict[int, str]
+                  ) -> None:
+    '''
+    Create a scatter mapbox plot to visualize 
+        customers' addresses by cluster.
 
-def map_clusters(df, color_dict):
+    ----------
+    Parameters:
+     - df (pd.DataFrame): The DataFrame containing the data,
+         including 'latitude', 'longitude', and 
+         'cluster_kmeans' columns.
+     - color_dict (Dict[int, str]): A dictionary mapping 
+        cluster numbers to color codes.
+    
+    ----------
+    Returns:
+     - None, but displays an interative map.
+
+    '''
+
     # Create a scatter mapbox figure
     fig = go.Figure()
 
     # Add scatter mapbox traces for each cluster
     for cluster, color in color_dict.items():
+        # Filter the DataFrame based on the current cluster
         filtered_df = df[df['cluster_kmeans'] == cluster]
+        # Create a scatter mapbox trace for the current cluster
         scatter = go.Scattermapbox(
             lat=filtered_df['latitude'],
             lon=filtered_df['longitude'],
@@ -172,6 +249,7 @@ def map_clusters(df, color_dict):
             name=f'Cluster {cluster}',
             visible=True
         )
+        # Add the trace to the figure
         fig.add_trace(scatter)
 
     # Set the mapbox style and center on Lisbon, change the color of the title
@@ -183,9 +261,10 @@ def map_clusters(df, color_dict):
         title_font_color="#e0218a"
     )
 
-    # Create a list of checkbox options
+    # Create a list of checkbox options for cluster visibility control
     checkboxes = []
     for cluster, color in color_dict.items():
+        # Create a checkbox option for the current cluster
         checkbox = dict(
             label=f'Cluster {cluster}',
             method='update',
@@ -193,7 +272,7 @@ def map_clusters(df, color_dict):
         )
         checkboxes.append(checkbox)
 
-    # Add the checkbox buttons
+    # Add the checkbox buttons to the map
     fig.update_layout(
         updatemenus=[
             go.layout.Updatemenu(
