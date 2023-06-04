@@ -118,7 +118,7 @@ def boxplot_color(df, variable, color_dict, clusters, xlabel, ylabel, title):
     fig, ax = plt.subplots()
 
     # Create the boxplot
-    boxplot = ax.boxplot([df[df['cluster_bisect_kmeans'] == cluster][variable].values for cluster in clusters],
+    boxplot = ax.boxplot([df[df['cluster_kmeans'] == cluster][variable].values for cluster in clusters],
                          patch_artist=True, medianprops={'color': '#000000'})
 
     # Set the facecolor for each box based on the cluster color
@@ -164,7 +164,7 @@ def map_clusters(df, color_dict):
 
     # Add scatter mapbox traces for each cluster
     for cluster, color in color_dict.items():
-        filtered_df = df[df['cluster_bisect_kmeans'] == cluster]
+        filtered_df = df[df['cluster_kmeans'] == cluster]
         scatter = go.Scattermapbox(
             lat=filtered_df['latitude'],
             lon=filtered_df['longitude'],
