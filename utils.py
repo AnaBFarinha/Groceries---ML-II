@@ -2,6 +2,12 @@ import datetime
 import numpy as np
 import pandas as pd
 from typing import Tuple
+import ast
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
+import matplotlib.pyplot as plt
+from typing import List
+
 
 def calc_age(df: pd.DataFrame, 
              date: datetime.date = datetime.date(2023, 3, 31)
@@ -288,3 +294,49 @@ def IQR_outliers(df: pd.DataFrame,
             outliers[var] = np.unique(outliers[var])
             print('  Outliers: ',outliers[var])
         print()
+
+
+def rules_cluster(cust_clust: pd.DataFrame, cluster_n: int) -> pd.DataFrame:
+
+    """
+    Perform association rule on a cluster of customer data.
+
+    ----------
+    Parameters:
+     - cust_clust(pd.DataFrame): DataFrame containing 
+        customer data with cluster labels.
+     - cluster_n(int): Cluster number to analyze.
+
+    ----------
+    Returns:
+     - rules_grocery(pd.DataFrame): Association rules for the specified cluster.
+    """
+
+    # Select cluster data
+    cluster = cust_clust[cust_clust['cluster_kmeans'] == cluster_n]
+
+    # Convert string representation of products to list
+    list_of_goods = [ast.literal_eval(product) for product in cluster["list_of_goods"].values]
+
+    # Transform data for association rule mining
+    te = TransactionEncoder()
+    te_fit = te.fit(list_of_goods).transform(list_of_goods)
+    transactions_items = pd.DataFrame(te_fit, columns=te.columns_)
+
+    # Find frequent itemsets
+    frequent_itemsets_grocery = apriori(transactions_items, min_support=0.04, use_colnames=True)
+
+    # Generate association rules
+    rules_grocery = association_rules(frequent_itemsets_grocery, metric="confidence", min_threshold=0.2)
+
+    # Calculate total number of items in each rule
+    rules_grocery['total_goods'] = rules_grocery['antecedents'].str.len() + rules_grocery['consequents'].str.len()
+
+    # Plot lift vs confidence
+    plt.scatter(rules_grocery['lift'], rules_grocery['confidence'], color='#e0218a')
+    plt.xlabel('Lift')
+    plt.ylabel('Confidence')
+    plt.title(f'Cluster {cluster_n}')
+    plt.show()
+
+    return rules_grocery
