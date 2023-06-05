@@ -292,7 +292,21 @@ def map_clusters(df: pd.DataFrame,
     fig.show()
 
 
-def plot_AR(rules_grocery):
+def plot_AR(rules_grocery: pd.DataFrame) -> None:
+    
+    """
+    Plot association rules as a scatter plot.
+
+    ----------
+    Parameters:
+     - rules_grocery (pd.DataFrame): DataFrame containing
+         association rules.
+
+    ----------
+    Returns:
+     - None, but it shows an interactive plot.
+    """
+
     # Convert the 'antecedents' and 'consequents' columns from frozenset to list
     rules_grocery['antecedents'] = rules_grocery['antecedents'].apply(list)
     rules_grocery['consequents'] = rules_grocery['consequents'].apply(list)
