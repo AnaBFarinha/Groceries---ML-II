@@ -86,7 +86,7 @@ def data_load(path: str
 
    """
     
-    if path[-5:] == '.xlsv':
+    if path[-5:] == '.xlsx':
         return pd.read_excel(path)
     
     elif path[-4:] == '.csv':
