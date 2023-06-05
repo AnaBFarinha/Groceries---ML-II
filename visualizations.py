@@ -290,3 +290,55 @@ def map_clusters(df: pd.DataFrame,
 
     # Show the figure
     fig.show()
+
+
+def plot_AR(rules_grocery):
+    # Convert the 'antecedents' and 'consequents' columns from frozenset to list
+    rules_grocery['antecedents'] = rules_grocery['antecedents'].apply(list)
+    rules_grocery['consequents'] = rules_grocery['consequents'].apply(list)
+
+    # Convert the DataFrame to a JSON-compatible format
+    data = rules_grocery.to_dict(orient='records')
+
+    # Create a scatter trace
+    scatter_trace = go.Scatter(
+        x=[rule['lift'] for rule in data],
+        y=[rule['confidence'] for rule in data],
+        mode='markers',
+        text=[f"Antecedents: {rule['antecedents']}<br>Consequents: {rule['consequents']}<br>Support: {rule['support']}"
+            for rule in data],
+        hovertemplate='<b>Rule Details:</b><br>%{text}<br>'
+                    '<b>Lift:</b> %{x}<br>'
+                    '<b>Confidence:</b> %{y}<extra></extra>',
+        customdata=data,  # Store the entire DataFrame as custom data
+        marker=dict(
+            color='#e0218a'  # Set the color of the points (e.g., 'blue')
+        )
+    )
+
+    # Create the layout
+    layout = go.Layout(
+        title='Association Rules',
+        xaxis=dict(title='Lift'),
+        yaxis=dict(title='Confidence'),
+        hovermode='closest',
+        plot_bgcolor='white'
+    )
+
+    # Create the figure
+    fig = go.Figure(data=[scatter_trace], layout=layout)
+
+    # Change grid color
+    fig = fig.update_yaxes(gridcolor='lightgrey')
+    fig = fig.update_xaxes(gridcolor='lightgrey')
+
+    # Define the callback function for clicking on a point
+    def point_click_callback(trace, points, state):
+        rule = points.point.customdata[points.point.point_inds[0]]
+        print(rule)  # Modify this to perform the desired action with the rule details
+
+    # Assign the callback function to the scatter trace
+    scatter_trace.on_click(point_click_callback)
+
+    # Show the figure
+    fig.show()

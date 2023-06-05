@@ -332,11 +332,4 @@ def rules_cluster(cust_clust: pd.DataFrame, cluster_n: int) -> pd.DataFrame:
     # Calculate total number of items in each rule
     rules_grocery['total_goods'] = rules_grocery['antecedents'].str.len() + rules_grocery['consequents'].str.len()
 
-    # Plot lift vs confidence
-    plt.scatter(rules_grocery['lift'], rules_grocery['confidence'], color='#e0218a')
-    plt.xlabel('Lift')
-    plt.ylabel('Confidence')
-    plt.title(f'Cluster {cluster_n}')
-    plt.show()
-
     return rules_grocery
